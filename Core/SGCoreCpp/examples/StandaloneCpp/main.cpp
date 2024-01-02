@@ -1,3 +1,5 @@
+// https://github.com/Adjuvo/SenseGlove-API/blob/master/Core/SGCoreCpp/examples/StandaloneCpp/main.cpp
+
 // SGCoreCpp_Standalone.cpp : Example to show how to build a SenseGlove project that's independent of the SenseCom program.
 //
 
@@ -6,9 +8,14 @@
 #include "DeviceList.h"
 #include "SenseGlove.h"
 #include "Library.h"
+#include "Vect3D.h"
 
 #include <thread>
 #include <chrono> //wait untill we find SenseGloves
+
+#include <fstream>
+#include <iomanip>
+#include <ctime>
 
 int main()
 {
@@ -68,10 +75,99 @@ int main()
 
 			// We want to get the pose of the hand - to animate a virtual model
 			SGCore::HandPose handPose; //The handPose class contains all data you'll need to animate a virtual hand
+
+
+
+
+
+			// ANDREW
+			// 
+			// 
+			// Reading of data into txt file for training
+
+
+			// /*
+			
+			system("pause");
+
+			std::ofstream myfile;
+			myfile.open("Individual Handpose Training Set.txt", std::ios_base::app);
+			auto t = std::time(nullptr);
+			auto tm = *std::localtime(&t);
+			myfile << "\n" << std::put_time(&tm, "%d-%m-%Y %H:%M:%S") << "\n";
+			std::cout << std::put_time(&tm, "%d-%m-%Y %H:%M:%S") << std::endl;
+			myfile.close();
+
+			std::string s;
+
+			/*
+			
+			Usage:
+
+			Computer says "Press any key to continue"
+			
+			Manav: "A. 1"
+			Type: enter 0 enter
+			Say: "OK"
+
+			Manav: "2"
+			Type: enter enter
+			Say: "OK"
+
+
+			...
+
+			Manav: "10"
+			Type: enter enter
+			Say: "OK"
+
+			Manav: "B. 1"
+			Type: ener 1 enter
+			Say: "OK"
+
+			...
+			
+			*/
+
+			while (glove->GetHandPose(handPose)) {
+				std::string ss;
+				getline(std::cin, ss);
+				if (!ss.empty()) s = ss;
+
+				myfile.open("Individual Handpose Training Set.txt", std::ios_base::app);
+
+				myfile << handPose.handAngles[0][0].x << ",";
+				for (int i = 0; i < 5; i++) {
+					myfile << handPose.handAngles[i][0].y << "," << handPose.handAngles[i][0].z << "," << handPose.handAngles[i][1].y << "," << handPose.handAngles[i][2].y << ",";
+				}
+				myfile << s << "\n";
+				myfile.close();
+
+				std::cout << handPose.handAngles[0][0].x << ",";
+				for (int i = 0; i < 5; i++) {
+					std::cout << handPose.handAngles[i][0].y << "," << handPose.handAngles[i][0].z << "," << handPose.handAngles[i][1].y << "," << handPose.handAngles[i][2].y << ",";
+				}
+				std::cout << s << std::endl;
+
+				system("pause");
+			}
+
+			// */
+
+
+
+			// Real-time writing of data
+
+
+
+
+			// the end
+
 			if (glove->GetHandPose(handPose)) //returns the HandPose based on the latest device data, using the latest Profile and the default HandGeometry
 			{
 				std::cout << "Retrieved the latest Hand Pose from " + glove->ToString() + ". The ToString() function reports important finger angles, in degrees, in our coodinate system:" << std::endl;
 				std::cout << handPose.ToString() << std::endl;
+				
 
 				// The HandPose is still in our Coordinate System, relative to the wrist.
 				// You'll need to convert our Vect3D and Quats to your own coordinate system. You can find an explanation of our Coordinate system at docs.senseglove.com/
