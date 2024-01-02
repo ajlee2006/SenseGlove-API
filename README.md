@@ -1,3 +1,5 @@
+C++ code to store hardware data from the SenseGlove DK1.X: [Core/SGCoreCpp/examples/StandaloneCpp/main.cpp](https://github.com/ajlee2006/SenseGlove-API/blob/master/Core/SGCoreCpp/examples/StandaloneCpp/main.cpp)
+
 # SenseGlove API
 
 This repository houses the Software APIs for SenseGlove Devices for C++ and C# development for Windows and Linux.
